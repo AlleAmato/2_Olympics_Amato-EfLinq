@@ -8,6 +8,6 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <!--ItemsSource="{Binding Dati}"-->
-        <DataGrid ItemSource = "{Binding Dati2}" > </DataGrid>
+        <DataGrid ItemsSource = "{Binding Dati2}" > </DataGrid>
     </Grid>
 </Window>

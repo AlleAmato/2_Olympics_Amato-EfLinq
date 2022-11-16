@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="31cf303a0f93469fb44cb76a937e9c60" Name="Diagram1">
+        <EntityTypeShape EntityType="Olympic.athlete" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Olympic.AthletesNf" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="Olympic.Event" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Olympic.Game" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Olympic.Medal" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="Olympic.Partecipation" Width="1.5" PointX="6" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="Olympic.FK__Medals__Id_Athle__787EE5A0" ManuallyRouted="false" />
+        <AssociationConnector Association="Olympic.FK__Partecipa__Id_At__70DDC3D8" ManuallyRouted="false" />
+        <AssociationConnector Association="Olympic.FK__Medals__Id_Event__7A672E12" ManuallyRouted="false" />
+        <AssociationConnector Association="Olympic.FK__Partecipa__Id_Ev__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="Olympic.FK__Medals__Id_Game__797309D9" ManuallyRouted="false" />
+        <AssociationConnector Association="Olympic.FK__Partecipa__Id_Ga__71D1E811" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

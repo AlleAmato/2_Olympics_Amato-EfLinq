@@ -17,7 +17,7 @@ namespace EtityFrameworkLinq_esempio.ViewModels
             get { return _dati; }
             set { _dati = value; }
         }
-
+        /*
         private List<CittaOspitante> _dati2;
 
         public List<CittaOspitante> Dati2
@@ -26,10 +26,25 @@ namespace EtityFrameworkLinq_esempio.ViewModels
             set { _dati2 = value; }
         }
 
-        public MainWindowViewModel()
+        private ContaAtleti _dati3;
+
+        public ContaAtleti Dati3
         {
-            using(OlympicsContext context=new OlympicsContext())
-            {/*
+            get { return _dati3; }
+            set { _dati3 = value; }
+        }
+
+        private List<CittaOspitante2> _dati4;
+
+        public List<CittaOspitante2> Dati4
+        {
+            get { return _dati4; }
+            set { _dati4 = value; }*/
+
+    public MainWindowViewModel()
+        {
+        using (OlympicsContext context = new OlympicsContext())
+        {/*
                 //query costruita, tutti i metodi vanno messi prima del ToList()
                 //Dati = context.athletes
                 //    .Where(q => q.IdAthlete >= 7 )
@@ -117,24 +132,88 @@ namespace EtityFrameworkLinq_esempio.ViewModels
 
                 //query di fine lezione
 
-                //1)
-               /* Dati = context.athletes
-                .Where(q => q.Medal=="Gold" )
-                .Where(q=>q.Age >=1)
-                .OrderBy(ob => ob.Age).ThenBy(ob => ob.Name)
-                .Take(10)//top (10) di quelle rimaste dopo lo skip
-                .ToList();*/
+                //1 giusta) Selezione i 10 atleti più giovani ad aver vinto una medaglia d'oro
+                var query1 = context.athletes
+            .Where(q => q.Medal == "Gold")
+            .Where(q => q.Age != null)
+            .Select(s => new
+            {
+                s.IdAthlete,
+                s.Name,
+                s.Age
+            })
+            .Distinct()
+            .OrderBy(ob => ob.Age).ThenBy(ob => ob.Name)
+            .Take(10)
+            .ToList();
 
-                //2)
-                Dati2= context.athletes.Select( 
-                     s => new CittaOspitante
-                     {
-                        //creo una classe anonima e la definisco qua
-                        City = s.City //nazione =s.noc è come: NOC as Nazione
+                //2 giusta) Recuperare l'elenco delle città che hanno ospitato i giochi, in ordine alfabetico
+                var query2 = context.athletes.Select( 
+                  s => new 
+                    {
+                      s.City 
                     }
-                     ).Distinct().OrderBy(ob=>ob.City).ToList();
+                  ).Distinct().OrderBy(ob=>ob.City).ToList();
 
+                //3 giusta) Quanti atleti hanno vinto la medaglia d'oro?
+                var query3 = context.athletes
+                     .Where(q => q.Medal == "Gold")
+                     .Select(s => s.IdAthlete) //in questo modo non creo un nuovo oggetto ma una stringa
+                                               //(che poi faccio a tolist così è anche bindabile se ho una lista in questo caso no)
+                     .Distinct()
+                     .Count();
+
+                //4 giusta) Per ogni città calcolare quante edizioni ha ospitato. Ordinare in ordine decrescente.
+                var query4 = context.athletes
+                    .Select(s => new
+                    {
+                        s.City,
+                        s.Games
+                    }
+                    )
+                    .GroupBy(gb => new
+                    {
+                        gb.City,
+                    })
+                    .Select(s => new
+                    {
+                        s.Key.City,
+                        Editions = s.Distinct().Count()
+                    })
+                    .OrderByDescending(obd => obd.Editions).ThenBy(ob=>ob.City)
+                    .ToList();
+                //5 giusta) Stilare la classifica degli sport che hanno assegnato più medaglie,Sulle tabelle normalizzate
+                var query5 = context.Medals
+                    .Select(s => new
+                    {
+                        s.Event.Sport
+                    })
+                    .GroupBy(gb => new
+                    {
+                        gb.Sport
+                    })
+                    .Select(s => new
+                    {
+                        s.Key.Sport,
+                        Medals = s.Count()
+                    })
+                    .OrderByDescending(ob=>ob.Medals)
+                    .ToList();
+
+                //6 giusta) Per ogni edizione calcolare il numero totale di medaglie assegnate, Sulle tabelle normalizzate
+                var query6 = context.Medals
+                    .Select(s => s.Game.Games) //visto che abbiamo un solo parametro posso fare cosi e farlo diventare una stringa e non un oggetto
+                    .GroupBy(gb => gb)//non devo creare l'oggetto per gb
+                    .Select(s => new
+                    {
+                        s.Key, //qua l'oggetto per cui ho fatto il group by quin coì è una stringa, è tutto più semplice,
+                               //se mi basta un campo evito di creare un nuovo oggetto e faccio solo una stringa
+                        Medals = s.Count()
+                    })
+                    .OrderByDescending(ob => ob.Medals)
+                    .ToList();
             }
         }
-    }
 }
+}
+
